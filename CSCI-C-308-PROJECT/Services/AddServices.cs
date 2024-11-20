@@ -1,4 +1,5 @@
-﻿using CSCI_308_TEAM5.API.Services.Email;
+﻿using CSCI_308_TEAM5.API.Services.Config;
+using CSCI_308_TEAM5.API.Services.Email;
 
 namespace CSCI_308_TEAM5.API.Services
 {
@@ -7,6 +8,7 @@ namespace CSCI_308_TEAM5.API.Services
         public static void AddServices(this IServiceCollection services)
         {
             services.AddSingleton<IEmailServices, EmailServices>();
+            services.AddSingleton<IConfigService, ConfigService>();
         }
     }
 }
