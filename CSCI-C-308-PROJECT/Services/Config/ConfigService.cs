@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using CSCI_308_TEAM5.API.Extensions;
+using Npgsql;
 using System.Data.Common;
 
 namespace CSCI_308_TEAM5.API.Services.Config
@@ -23,5 +24,7 @@ namespace CSCI_308_TEAM5.API.Services.Config
                 return new NpgsqlConnection($"User ID=team5;Password={dbPwd};Host={dbHost};Port=5432;Database=TEAM5_API;");
             }
         }
+
+        public string jwtSignature => "JWT_SIGNATURE".getEnvVariable(true);
     }
 }

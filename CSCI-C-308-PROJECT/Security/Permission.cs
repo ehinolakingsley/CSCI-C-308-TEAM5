@@ -2,11 +2,13 @@
 {
     public enum Roles
     {
-        Admin = 2,
+        Admin = 3,
 
-        Driver = 1,
+        Driver = 2,
 
-        Members = 0
+        Member = 1,
+
+        None = 0 // Default
     }
 
     public struct RolesPermissions
