@@ -2,11 +2,13 @@
 {
     public enum Roles
     {
-        Admin = 3,
+        Admin = 4,
+
+        User = 3,
 
         Driver = 2,
 
-        Member = 1,
+        Rider = 1,
 
         None = 0 // Default
     }

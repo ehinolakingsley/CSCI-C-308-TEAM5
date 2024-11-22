@@ -1,3 +1,5 @@
+using CSCI_308_TEAM5.API.Actions;
+using CSCI_308_TEAM5.API.Repository;
 using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services;
 
@@ -11,6 +13,8 @@ builder.Services.AddSecurities();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddServices();
+builder.Services.AddRepositories();
+builder.Services.AddActions();
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -24,7 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
