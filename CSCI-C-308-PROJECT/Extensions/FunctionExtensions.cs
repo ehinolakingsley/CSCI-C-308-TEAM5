@@ -60,5 +60,34 @@ namespace CSCI_308_TEAM5.API.Extensions
 
             return environmentVariable;
         }
+
+        public static bool addressValid(this AddressArgs address, out string message)
+        {
+            message = "Please enter your full address including house number, street, city, state, and ZIP code if applicable.";
+
+            if (address is null)
+                return false;
+
+            bool hasValidLenght(string value, int min, int max)
+            {
+                int length = value.Length;
+                return length >= min && length <= max;
+            }
+
+            return (message = address switch
+            {
+                _ when address.Street.empty() => "Street address cannot be left blank...",
+                _ when !hasValidLenght(address.Street, 5, 300) => "Street address length must be between 5 and 300 characters.",
+                _ when address.State.empty() => "State cannot be left blank...",
+                _ when !hasValidLenght(address.State, 2, 50) => "State length must be between 2 and 50 characters.",
+                _ when address.City.empty() => "City cannot be left blank...",
+                _ when !hasValidLenght(address.City, 2, 50) => "City length must be between 2 and 50 characters.",
+                _ when address.Country.empty() => "Country cannot be left blank...",
+                _ when !hasValidLenght(address.Country, 2, 50) => "Country length must be between 2 and 50 characters.",
+                _ when !address.ZipCode.empty() && !hasValidLenght(address.ZipCode, 2, 10) => "Zip-Code length must be between 2 and 10 characters.",
+                _ => "valid"
+
+            }) == "valid";
+        }
     }
 }
