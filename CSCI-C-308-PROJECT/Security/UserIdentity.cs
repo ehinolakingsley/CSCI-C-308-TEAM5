@@ -8,5 +8,12 @@ namespace CSCI_308_TEAM5.API.Security
         public string username { get; set; }
 
         public Roles accessRole { get; set; }
+
+        public void update(IUserIdentity identity)
+        {
+            this.username = identity.username;
+            this.accessRole = identity.accessRole;
+            this.userId = identity.userId;
+        }
     }
 }

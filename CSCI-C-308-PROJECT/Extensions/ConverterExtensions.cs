@@ -1,8 +1,4 @@
-﻿using CSCI_308_TEAM5.API.Security;
-using System.Collections;
-using System.Security.Claims;
-
-namespace CSCI_308_TEAM5.API.Extensions
+﻿namespace CSCI_308_TEAM5.API.Extensions
 {
     public static class ConverterExtensions
     {
