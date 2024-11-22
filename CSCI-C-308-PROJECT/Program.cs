@@ -23,11 +23,11 @@ builder.Services.AddActions();
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-var assemblyName = Assembly.Load("CSCI-C-308-TEAM5.API.dll");
+var targetAssembly = Path.Combine(AppContext.BaseDirectory, "CSCI-C-308-TEAM5.API.dll");
+var assemblyName = Assembly.Load(AssemblyName.GetAssemblyName(targetAssembly));
 builder.Services.AddValidatorsFromAssembly(assemblyName);
+
 builder.Services.Configure<MvcOptions>(options => options.Filters.Add<FluentValidatorFilter>());
-
-
 var app = builder.Build();
 
 
