@@ -9,5 +9,7 @@ namespace CSCI_308_TEAM5.API.Services.Config
         DbConnection dbConnection { get; }
 
         string jwtSignature { get; }
+
+        string ProductName { get; }
     }
 }

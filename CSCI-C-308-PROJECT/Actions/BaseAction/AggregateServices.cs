@@ -18,7 +18,7 @@ namespace CSCI_308_TEAM5.API.Actions.BaseAction
 
         public IActionResult Ok(object data = null) => new APIResponseHandler(data);
 
-        public async Task<IActionResult> Action(Func<Task<IActionResult>> action)
+        public async Task<IActionResult> Execute(Func<Task<IActionResult>> action)
         {
             try
             {

@@ -26,5 +26,7 @@ namespace CSCI_308_TEAM5.API.Services.Config
         }
 
         public string jwtSignature => "JWT_SIGNATURE".getEnvVariable(true);
+
+        public string ProductName => "TheRider";
     }
 }

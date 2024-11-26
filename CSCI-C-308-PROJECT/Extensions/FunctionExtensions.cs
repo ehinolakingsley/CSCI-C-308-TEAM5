@@ -89,5 +89,30 @@ namespace CSCI_308_TEAM5.API.Extensions
 
             }) == "valid";
         }
+
+        public static string formatName(this string fullName)
+        {
+            if (string.IsNullOrEmpty(fullName))
+                throw new ArgumentException("Full name cannot be empty.", nameof(fullName));
+
+            var parts = fullName.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+
+            string firstName = parts[0];
+
+            string formattedFullName = $"{char.ToUpper(firstName[0]) + firstName[1..].ToLower()}";
+
+            for (int i = 1; i < parts.Length; i++)
+            {
+                string part = parts[i];
+
+                // Capitalize the first letter if it's not already capitalized
+                if (!char.IsUpper(part[0]))
+                    formattedFullName += " " + char.ToUpper(part[0]) + part[1..].ToLower();
+                else
+                    formattedFullName += " " + part;
+            }
+
+            return formattedFullName;
+        }
     }
 }

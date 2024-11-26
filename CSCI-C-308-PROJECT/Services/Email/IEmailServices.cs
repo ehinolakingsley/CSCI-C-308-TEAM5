@@ -1,6 +1,7 @@
 ﻿namespace CSCI_308_TEAM5.API.Services.Email
 {
-    public interface IEmailServices
+    interface IEmailServices
     {
+        void postMail(string emailAddress, string message, string subject);
     }
 }
