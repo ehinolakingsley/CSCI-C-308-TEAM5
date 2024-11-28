@@ -59,14 +59,43 @@ namespace CSCI_308_TEAM5.API.Controllers
         public async Task<IActionResult> riderSignUp(RiderArgs arg) => await authenticationAction.addRider(arg);
 
         /// <summary>
-        /// User's registration setup
+        /// Admin's registration setup
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(200, Type = typeof(string))]
-        public async Task<IActionResult> userSignUp(UserArgs arg) => await authenticationAction.addUser(arg);
+        public async Task<IActionResult> adminSignUp(UsersArgs arg) => await authenticationAction.addAdmin(arg);
+
+        /// <summary>
+        /// Driver's registration setup
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(200, Type = typeof(string))]
+        public async Task<IActionResult> driverSignUp(UsersArgs arg) => await authenticationAction.addDriver(arg);
+
+        /// <summary>
+        /// Get user's profile information
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(200, Type = typeof(ProfileInfo))]
+        public async Task<IActionResult> getProfileInfo() => await authenticationAction.getProfileInfo();
+
+        /// <summary>
+        /// Validate user's token code
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(200, Type = typeof(TokenInfo))]
+        public async Task<IActionResult> otp(string code) => await authenticationAction.otpValidation(code);
 
     }
 }

@@ -7,7 +7,11 @@ namespace CSCI_308_TEAM5.API.Repository.Role
     {
         Task<bool> any(Guid userId, Roles role);
 
-        Task add(Guid userId, Roles role);
+        Task add(Guid userId, Roles role, bool activate);
+
+        Task updateStatus(Guid userId, Roles role, bool status);
+
+        Task<RoleTbModel> get(Guid userId, Roles role);
     }
 
     sealed class RoleTb(IConfigService configService) : IRoleTb

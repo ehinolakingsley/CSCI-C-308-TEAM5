@@ -2,9 +2,7 @@
 {
     public enum Roles
     {
-        Admin = 4,
-
-        User = 3,
+        Admin = 3,
 
         Driver = 2,
 

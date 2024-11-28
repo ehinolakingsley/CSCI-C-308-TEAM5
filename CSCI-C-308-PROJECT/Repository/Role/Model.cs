@@ -7,5 +7,7 @@
         public Guid UserId { get; set; }
 
         public int RoleId { get; set; }
+
+        public bool Activated { get; set; }
     }
 }

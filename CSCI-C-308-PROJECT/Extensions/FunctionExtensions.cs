@@ -32,7 +32,7 @@ namespace CSCI_308_TEAM5.API.Extensions
             throw new ArgumentException($"Unable to parse scheme type: '{scheme}' with value: '{token}'");
         }
 
-        public static IUserIdentity parseClaims(this IEnumerable<Claim> claims)
+        public static IUserIdentity parseClaims(this IEnumerable<Claim> claims, string userAgent)
         {
             if (claims is null)
                 return null;
@@ -41,7 +41,8 @@ namespace CSCI_308_TEAM5.API.Extensions
             {
                 username = claims.FirstOrDefault(i => i.Type == "username")?.Value,
                 accessRole = claims.FirstOrDefault(i => i.Type == "role")?.Value.CEnum<Roles>() ?? Roles.None,
-                userId = claims.FirstOrDefault(i => i.Type == "id")?.Value.CGuid() ?? Guid.Empty
+                userId = claims.FirstOrDefault(i => i.Type == "id")?.Value.CGuid() ?? Guid.Empty,
+                userAgent = userAgent
             };
         }
 
@@ -113,6 +114,14 @@ namespace CSCI_308_TEAM5.API.Extensions
             }
 
             return formattedFullName;
+        }
+
+        public static int generateOneTime6DigitCode(this Random random) => random.Next(100000, 1000000);
+
+        public static string maskEmail(this string email)
+        {
+            var emailParts = email.Split('@');
+            return emailParts[0].Substring(0, 1) + "*****@" + emailParts[1];
         }
     }
 }

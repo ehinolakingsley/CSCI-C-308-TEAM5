@@ -11,14 +11,24 @@
         public AddressArgs Address { get; set; }
     }
 
-    public sealed record UserArgs
+    public record UsersArgs
+    {
+        public string FullName { get; set; }
+
+        public string EmailAddress { get; set; }
+    }
+
+    public record TokenInfo(Guid RefreshToken, string Token, int Expires)
+    {
+        public string TokenType => "Bearer";
+    }
+
+    public record ProfileInfo
     {
         public string FullName { get; set; }
 
         public string PhoneNumber { get; set; }
 
         public string EmailAddress { get; set; }
-
-        public Security.Roles Role { get; set; }
     }
 }

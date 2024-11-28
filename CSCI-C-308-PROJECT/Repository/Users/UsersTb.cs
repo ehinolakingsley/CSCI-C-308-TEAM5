@@ -1,10 +1,13 @@
 ﻿using CSCI_308_TEAM5.API.Services.Config;
+using Npgsql.TypeMapping;
 
 namespace CSCI_308_TEAM5.API.Repository.Users
 {
     interface IUsersTb
     {
         Task<UsersTbModel> get(string emailAddress);
+
+        Task<UsersTbModel> get(Guid userId);
 
         Task update(Guid userId, UsersTbArgs args);
 

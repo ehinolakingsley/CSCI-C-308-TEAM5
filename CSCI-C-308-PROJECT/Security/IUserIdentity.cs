@@ -8,6 +8,8 @@
 
         Roles accessRole { get; }
 
+        string userAgent { get; }
+
         void update(IUserIdentity identity);
     }
 }

@@ -32,7 +32,8 @@ namespace CSCI_308_TEAM5.API.Security
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configService.jwtSignature))
                 }, out _);
 
-                var identity = principal.Claims.parseClaims();
+                Request.Headers.TryGetValue("UserAgent", out var userAgent);
+                var identity = principal.Claims.parseClaims(userAgent);
 
                 userIdentity.update(identity);
 

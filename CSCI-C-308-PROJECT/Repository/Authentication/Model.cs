@@ -12,8 +12,6 @@
 
         public DateTime DateCreated { get; set; }
 
-        public DateTime LastAccessed { get; set; }
-
         public string UserAgent { get; set; }
 
         public int RoleId { get; set; }

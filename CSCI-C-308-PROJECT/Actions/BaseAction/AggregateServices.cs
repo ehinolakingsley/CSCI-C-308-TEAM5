@@ -1,12 +1,12 @@
 ﻿using CSCI_308_TEAM5.API.Repository;
+using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services.Config;
 using CSCI_308_TEAM5.API.Services.Email;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace CSCI_308_TEAM5.API.Actions.BaseAction
 {
-    class AggregateServices(IRepo repo, IConfigService configService, IEmailServices emailServices) : IAggregateServices
+    class AggregateServices(IRepo repo, IConfigService configService, IEmailServices emailServices, IUserIdentity userIdentity) : IAggregateServices
     {
         public IRepo repo { get; init; } = repo;
 
@@ -14,11 +14,13 @@ namespace CSCI_308_TEAM5.API.Actions.BaseAction
 
         public IEmailServices emailServices { get; init; } = emailServices;
 
-        public IActionResult Error(HttpStatusCode statusCode, string reason) => new APIResponseHandler(statusCode, reason);
+        public IUserIdentity userIdentity { get; init; } = userIdentity;
 
-        public IActionResult Ok(object data = null) => new APIResponseHandler(data);
+        public static IActionResult Error(HttpStatusCode statusCode, string reason) => new APIResponseHandler(statusCode, reason);
 
-        public async Task<IActionResult> Execute(Func<Task<IActionResult>> action)
+        public static IActionResult Ok(object data = null) => new APIResponseHandler(data);
+
+        public static async Task<IActionResult> Execute(Func<Task<IActionResult>> action)
         {
             try
             {
