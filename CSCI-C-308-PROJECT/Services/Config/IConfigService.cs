@@ -11,5 +11,7 @@ namespace CSCI_308_TEAM5.API.Services.Config
         string jwtSignature { get; }
 
         string ProductName { get; }
+
+        EmailClientCredentialInfo emailClientCredential { get; }
     }
 }

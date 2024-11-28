@@ -26,5 +26,12 @@
             return result;
         }
 
+        public static int CInt(this string value)
+        {
+            if (int.TryParse(value, out int result))
+                return result;
+
+            throw new FormatException($"{value} could not be converted to an integer.");
+        }
     }
 }

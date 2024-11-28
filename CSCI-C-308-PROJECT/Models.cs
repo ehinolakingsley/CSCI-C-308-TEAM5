@@ -30,4 +30,7 @@
 
         public string Country { get; set; }
     }
+
+    public sealed record EmailClientCredentialInfo(string SMTPAddress, int SMTPPort, string SMTPPwd, string SMTPServer);
+
 }

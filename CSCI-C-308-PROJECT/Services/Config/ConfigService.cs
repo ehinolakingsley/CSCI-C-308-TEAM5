@@ -1,5 +1,4 @@
-﻿using CSCI_308_TEAM5.API.Extensions;
-using Npgsql;
+﻿using Npgsql;
 using System.Data.Common;
 
 namespace CSCI_308_TEAM5.API.Services.Config
@@ -28,5 +27,8 @@ namespace CSCI_308_TEAM5.API.Services.Config
         public string jwtSignature => "JWT_SIGNATURE".getEnvVariable(true);
 
         public string ProductName => "TheRider";
+
+        public EmailClientCredentialInfo emailClientCredential =>
+            new EmailClientCredentialInfo("SMTP_ADDRESS".getEnvVariable(true), "SMTP_PORT".getEnvVariable(true).CInt(), "SMTP_PWD".getEnvVariable(true), "SMTP_SERVER".getEnvVariable(true));
     }
 }
