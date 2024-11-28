@@ -1,6 +1,10 @@
 ﻿using CSCI_308_TEAM5.API.Actions.BaseAction;
 using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services.Email;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace CSCI_308_TEAM5.API.Actions.Authentication
 {
@@ -133,7 +137,6 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
                         Expires = DateTime.UtcNow.AddMinutes(15),
                         OTP = _6DigitsToken,
                         RoleId = roleInfo.RoleId,
-                        UserAgent = userIdentity.userAgent,
                         UserId = userProfile.UserId
                     });
 
@@ -188,12 +191,65 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
             });
         }
 
-        public async Task<IActionResult> otpValidation(string otpCode)
+        public async Task<IActionResult> otpValidation(int otpCode)
         {
             return await Execute(async () =>
             {
+                var otpInfo = await repo.oneTimeCodeTb.get(otpCode);
 
+                if (otpInfo is null)
+                    return Error(HttpStatusCode.Unauthorized, "Invalid One-Time Password Provided.");
 
+                if (otpInfo.Expires.Subtract(DateTime.UtcNow) < TimeSpan.Zero)
+                {
+                    await repo.oneTimeCodeTb.del(otpCode);
+                    return Error(HttpStatusCode.Unauthorized, "The provided One-Time Password (OTP) has expired.");
+                }
+
+                var userProfile = await repo.usersTb.get(userIdentity.userId);
+
+                if (userProfile is null)
+                    return Error(HttpStatusCode.Unauthorized, "Unable to complete verification process. Kindly contact administrator for assistance");
+
+                string generateToken(Guid userId, int roleID, string username, DateTime expires)
+                {
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    List<Claim> claims =
+                    [
+                        new Claim(Constants.jwtClaimUsername, username),
+                        new Claim(Constants.jwtClaimRoleID, roleID.ToString()),
+                        new Claim(Constants.jwtClaimUserID, userId.ToString())
+                    ];
+
+                    var jwt = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(claims),
+                        Issuer = Constants.jwtIssuer,
+                        Audience = Constants.jwtAudience,
+                        Expires = expires,
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configService.jwtSignature)), SecurityAlgorithms.HmacSha256)
+                    };
+
+                    return tokenHandler.WriteToken(tokenHandler.CreateToken(jwt));
+                }
+
+                // generate token:
+                var expires = DateTime.UtcNow.Add(TimeSpan.FromHours(6));
+                var token = generateToken(otpInfo.UserId, otpInfo.RoleId, userProfile.Email, expires);
+                var refreshToken = Guid.NewGuid();
+
+                await repo.authenticationTb.addOrUpdate(new Repository.Authentication.AuthenticationTbArgs
+                {
+                    Expires = expires,
+                    RefreshToken = refreshToken,
+                    RoleId = otpInfo.RoleId,
+                    Token = token,
+                    UserId = otpInfo.UserId,
+                });
+
+                await repo.oneTimeCodeTb.del(otpCode);
+
+                return Ok(new TokenInfo(refreshToken, token, (int)expires.Subtract(DateTime.UtcNow).TotalSeconds));
             });
         }
     }

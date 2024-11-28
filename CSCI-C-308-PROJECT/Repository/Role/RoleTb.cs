@@ -21,7 +21,22 @@ namespace CSCI_308_TEAM5.API.Repository.Role
             throw new NotImplementedException();
         }
 
+        public Task add(Guid userId, Roles role, bool activate)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> any(Guid userId, Roles role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<RoleTbModel> get(Guid userId, Roles role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task updateStatus(Guid userId, Roles role, bool status)
         {
             throw new NotImplementedException();
         }

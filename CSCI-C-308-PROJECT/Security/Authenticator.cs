@@ -22,8 +22,8 @@ namespace CSCI_308_TEAM5.API.Security
                 var principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, new TokenValidationParameters
                 {
                     ClockSkew = TimeSpan.FromMinutes(5),
-                    ValidIssuer = "csci-team5-members",
-                    ValidAudience = "Transportation Users",
+                    ValidIssuer = Constants.jwtIssuer,
+                    ValidAudience = Constants.jwtAudience,
                     ValidateIssuerSigningKey = true,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,

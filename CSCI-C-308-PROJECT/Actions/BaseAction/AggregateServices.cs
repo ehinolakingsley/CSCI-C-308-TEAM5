@@ -2,7 +2,6 @@
 using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services.Config;
 using CSCI_308_TEAM5.API.Services.Email;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CSCI_308_TEAM5.API.Actions.BaseAction
 {

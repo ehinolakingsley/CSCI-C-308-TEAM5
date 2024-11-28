@@ -11,6 +11,14 @@ namespace CSCI_308_TEAM5.API.Repository.RiderAddress
 
     sealed class RiderAddressTb(IConfigService configService) : IRiderAddressTb
     {
+        public Task<Guid> add(Guid userId, RiderAddressTbArgs args)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task update(Guid addressId, RiderAddressTbArgs args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

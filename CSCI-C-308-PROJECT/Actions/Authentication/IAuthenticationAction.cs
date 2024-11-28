@@ -1,5 +1,4 @@
 ﻿using CSCI_308_TEAM5.API.Security;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CSCI_308_TEAM5.API.Actions.Authentication
 {
@@ -7,7 +6,7 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
     {
         Task<IActionResult> authenticate(Roles role, string emailAddress);
 
-        Task<IActionResult> otpValidation(string otpCode);
+        Task<IActionResult> otpValidation(int otpCode);
 
         Task<IActionResult> logOut();
 

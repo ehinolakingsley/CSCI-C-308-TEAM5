@@ -3,9 +3,7 @@ using CSCI_308_TEAM5.API.Repository;
 using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services;
 using System.Text.Json.Serialization;
-using FluentValidation;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using CSCI_308_TEAM5.API.ControllerFilters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,14 +14,21 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorization();
 builder.Services.AddSecurities();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
 builder.Services.AddActions();
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-var targetAssembly = Path.Combine(AppContext.BaseDirectory, "CSCI-C-308-TEAM5.API.dll");
+string appAssemblyName = "CSCI-C-308-TEAM5.API";
+
+string xmlPath = Path.Combine(AppContext.BaseDirectory, $"{appAssemblyName}.xml");
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.IncludeXmlComments(xmlPath);
+});
+
+var targetAssembly = Path.Combine(AppContext.BaseDirectory, $"{appAssemblyName}.dll");
 var assemblyName = Assembly.Load(AssemblyName.GetAssemblyName(targetAssembly));
 builder.Services.AddValidatorsFromAssembly(assemblyName);
 

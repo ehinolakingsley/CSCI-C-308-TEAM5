@@ -14,7 +14,5 @@
         public int OTP { get; set; }
 
         public DateTime Expires { get; set; }
-
-        public string UserAgent { get; set; }
     }
 }

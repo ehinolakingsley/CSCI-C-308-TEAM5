@@ -39,9 +39,9 @@ namespace CSCI_308_TEAM5.API.Extensions
 
             return new UserIdentity
             {
-                username = claims.FirstOrDefault(i => i.Type == "username")?.Value,
-                accessRole = claims.FirstOrDefault(i => i.Type == "role")?.Value.CEnum<Roles>() ?? Roles.None,
-                userId = claims.FirstOrDefault(i => i.Type == "id")?.Value.CGuid() ?? Guid.Empty,
+                username = claims.FirstOrDefault(i => i.Type == Constants.jwtClaimUsername)?.Value,
+                accessRole = claims.FirstOrDefault(i => i.Type == Constants.jwtClaimRoleID)?.Value.CEnum<Roles>() ?? Roles.None,
+                userId = claims.FirstOrDefault(i => i.Type == Constants.jwtClaimUserID)?.Value.CGuid() ?? Guid.Empty,
                 userAgent = userAgent
             };
         }

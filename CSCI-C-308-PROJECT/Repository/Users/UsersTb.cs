@@ -26,6 +26,11 @@ namespace CSCI_308_TEAM5.API.Repository.Users
             throw new NotImplementedException();
         }
 
+        public Task<UsersTbModel> get(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task update(Guid userId, UsersTbArgs args)
         {
             throw new NotImplementedException();
