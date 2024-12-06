@@ -20,14 +20,14 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
 
                 if (userProfile is not null)
                 {
-                    if (await repo.roleTb.any(userProfile.UserId, Roles.Driver))
-                        return Error(HttpStatusCode.Conflict, "Your driver's account has already been configured.");
+                    if (await repo.roleTb.any(userProfile.userID, Roles.Driver))
+                        return Error(HttpStatusCode.Conflict, "Your driver's account has already created");
                 }
                 else
                     tempUserId = await repo.usersTb.add(new Repository.Users.UsersTbArgs
                     {
-                        Email = args.EmailAddress,
-                        Name = args.FullName
+                        email = args.EmailAddress,
+                        name = args.FullName
                     });
 
                 await repo.roleTb.add(tempUserId.Value, Roles.Driver, false); // Add driver's permission but deactivate it pending administrator's approval
@@ -45,20 +45,20 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
 
                 var payload = new Repository.Users.UsersTbArgs
                 {
-                    Email = args.EmailAddress,
-                    Name = args.FullName,
-                    Phone = args.PhoneNumber,
+                    email = args.EmailAddress,
+                    name = args.FullName,
+                    phone = args.PhoneNumber,
                 };
                 Guid? tempUserId = null;
 
                 if (userProfile is not null)
                 {
-                    if (await repo.roleTb.any(userProfile.UserId, Roles.Rider))
+                    if (await repo.roleTb.any(userProfile.userID, Roles.Rider))
                         return Error(HttpStatusCode.Conflict, "Rider's account is already set up and ready to go");
 
                     // Update profile with new data 
-                    await repo.usersTb.update(userProfile.UserId, payload);
-                    tempUserId = userProfile.UserId;
+                    await repo.usersTb.update(userProfile.userID, payload);
+                    tempUserId = userProfile.userID;
                 }
                 else
                     tempUserId = await repo.usersTb.add(payload);
@@ -66,10 +66,10 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
                 await repo.roleTb.add(tempUserId.Value, Roles.Rider, true);
                 await repo.riderAddressTb.add(tempUserId.Value, new Repository.RiderAddress.RiderAddressTbArgs
                 {
-                    City = args.Address.City,
-                    Country = args.Address.Country,
-                    State = args.Address.State,
-                    Street = args.Address.Street
+                    city = args.Address.City,
+                    country = args.Address.Country,
+                    state = args.Address.State,
+                    street = args.Address.Street
                 });
 
                 emailServices.postMail(args.EmailAddress, MailTemplate.welcomeRiderMsg(args.FullName), $"Welcome to {configService.ProductName}");
@@ -88,14 +88,14 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
 
                 if (userProfile is not null)
                 {
-                    if (await repo.roleTb.any(userProfile.UserId, Roles.Admin))
+                    if (await repo.roleTb.any(userProfile.userID, Roles.Admin))
                         return Error(HttpStatusCode.Conflict, "Your administrator's account has already been configured.");
                 }
                 else
                     tempUserId = await repo.usersTb.add(new Repository.Users.UsersTbArgs
                     {
-                        Email = args.EmailAddress,
-                        Name = args.FullName
+                        email = args.EmailAddress,
+                        name = args.FullName
                     });
 
                 await repo.roleTb.add(tempUserId.Value, Roles.Admin, true);
@@ -117,15 +117,15 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
                 if (userProfile is null)
                     return Error(HttpStatusCode.Unauthorized, "Authentication failed! Try again with your registered email address.");
 
-                var roleInfo = await repo.roleTb.get(userProfile.UserId, role);
+                var roleInfo = await repo.roleTb.get(userProfile.userID, role);
 
                 if (roleInfo is null)
                     return Error(HttpStatusCode.Unauthorized, "Authentication failed! Try again with your registered email address.");
 
-                if (!roleInfo.Activated)
+                if (!roleInfo.activated)
                     return Error(HttpStatusCode.Unauthorized, "Your account requires attention! Please contact the administrator for assistance.");
 
-                var latestTokenInfo = await repo.authenticationTb.get(userProfile.UserId, roleInfo.RoleId);
+                var latestTokenInfo = await repo.authenticationTb.get(userProfile.userID, roleInfo.roleID);
 
                 async Task<IActionResult> manageOTP()
                 {
@@ -134,27 +134,27 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
 
                     await repo.oneTimeCodeTb.addOrUpdate(new Repository.OneTimeCode.OneTimeTbArgs
                     {
-                        Expires = DateTime.UtcNow.AddMinutes(15),
+                        expires = DateTime.UtcNow.AddMinutes(15),
                         OTP = _6DigitsToken,
-                        RoleId = roleInfo.RoleId,
-                        UserId = userProfile.UserId
+                        roleID = roleInfo.roleID,
+                        userID = userProfile.userID
                     });
 
                     // Send out OneTime token to user
-                    emailServices.postMail(userProfile.Email, MailTemplate.otpMsg(userProfile.Name, _6DigitsToken), $"Your Verification Code");
+                    emailServices.postMail(userProfile.email, MailTemplate.otpMsg(userProfile.name, _6DigitsToken), $"Your Verification Code");
 
                     // Indicate to user to pop-up OTP form
-                    return Error(HttpStatusCode.NoContent, $"OTP code has been sent to {userProfile.Email.maskEmail()}. Kindly enter the code into the appropriate field.");
+                    return Error(HttpStatusCode.NoContent, $"OTP code has been sent to {userProfile.email.maskEmail()}. Kindly enter the code into the appropriate field.");
                 }
 
                 if (latestTokenInfo is null)
                     return await manageOTP();
 
-                if (DateTime.UtcNow.Subtract(latestTokenInfo.Expires) > TimeSpan.FromMinutes(0)) // Existing token has expired
+                if (DateTime.UtcNow.Subtract(latestTokenInfo.expires) > TimeSpan.FromMinutes(0)) // Existing token has expired
                     return await manageOTP();
 
                 // Send existing token to client
-                return Ok(new TokenInfo(latestTokenInfo.RefreshToken, latestTokenInfo.Token, (int)latestTokenInfo.Expires.Subtract(DateTime.UtcNow).TotalSeconds));
+                return Ok(new TokenInfo(latestTokenInfo.refreshToken, latestTokenInfo.token, (int)latestTokenInfo.expires.Subtract(DateTime.UtcNow).TotalSeconds));
             });
         }
 
@@ -169,9 +169,9 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
 
                 return Ok(new ProfileInfo
                 {
-                    EmailAddress = userProfile.Email.ToLower(),
-                    FullName = userProfile.Name.formatName(),
-                    PhoneNumber = userProfile.Phone ?? "N/A"
+                    EmailAddress = userProfile.email.ToLower(),
+                    FullName = userProfile.name.formatName(),
+                    PhoneNumber = userProfile.phone ?? "N/A"
                 });
             });
         }
@@ -200,7 +200,7 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
                 if (otpInfo is null)
                     return Error(HttpStatusCode.Unauthorized, "Invalid One-Time Password Provided.");
 
-                if (otpInfo.Expires.Subtract(DateTime.UtcNow) < TimeSpan.Zero)
+                if (otpInfo.expires.Subtract(DateTime.UtcNow) < TimeSpan.Zero)
                 {
                     await repo.oneTimeCodeTb.del(otpCode);
                     return Error(HttpStatusCode.Unauthorized, "The provided One-Time Password (OTP) has expired.");
@@ -235,16 +235,16 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
 
                 // generate token:
                 var expires = DateTime.UtcNow.Add(TimeSpan.FromHours(6));
-                var token = generateToken(otpInfo.UserId, otpInfo.RoleId, userProfile.Email, expires);
+                var token = generateToken(otpInfo.userID, otpInfo.roleID, userProfile.email, expires);
                 var refreshToken = Guid.NewGuid();
 
                 await repo.authenticationTb.addOrUpdate(new Repository.Authentication.AuthenticationTbArgs
                 {
-                    Expires = expires,
-                    RefreshToken = refreshToken,
-                    RoleId = otpInfo.RoleId,
-                    Token = token,
-                    UserId = otpInfo.UserId,
+                    expires = expires,
+                    refreshToken = refreshToken,
+                    roleId = otpInfo.roleID,
+                    token = token,
+                    userId = otpInfo.userID,
                 });
 
                 await repo.oneTimeCodeTb.del(otpCode);

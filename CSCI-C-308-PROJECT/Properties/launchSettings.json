@@ -14,8 +14,13 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_PWD": "team5",
-        "DB_HOST": "localhost"
+        "DB_PWD": "csc-team5",
+        "DB_HOST": "staging.igeeksng.me",
+        "JWT_SIGNATURE": "barbecue-epilogue-annotate-smudgy-overrule-greedy",
+        "SMTP_ADDRESS": "noreply@igeeksng.com",
+        "SMTP_PORT": "587",
+        "SMTP_PWD": "qG8XbRRUwLXW",
+        "SMTP_SERVER": "mail.privateemail.com"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:7280"

@@ -2,12 +2,12 @@
 {
     sealed record RoleTbModel
     {
-        public string Role { get; set; }
+        public string role { get; set; }
 
-        public Guid UserId { get; set; }
+        public Guid userID { get; set; }
 
-        public int RoleId { get; set; }
+        public int roleID { get; set; }
 
-        public bool Activated { get; set; }
+        public bool activated { get; set; }
     }
 }

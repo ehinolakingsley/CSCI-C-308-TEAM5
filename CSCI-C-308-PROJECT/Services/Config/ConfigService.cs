@@ -20,7 +20,7 @@ namespace CSCI_308_TEAM5.API.Services.Config
             {
                 string dbPwd = "DB_PWD".getEnvVariable(true);
                 string dbHost = "DB_HOST".getEnvVariable(true);
-                return new NpgsqlConnection($"User ID=team5;Password={dbPwd};Host={dbHost};Port=5432;Database=TEAM5_API;");
+                return new NpgsqlConnection($"User ID=csc-team5;Password={dbPwd};Host={dbHost};Port=5432;Database=CSC-Team5;");
             }
         }
 

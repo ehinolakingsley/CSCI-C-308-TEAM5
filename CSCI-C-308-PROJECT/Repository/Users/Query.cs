@@ -8,8 +8,8 @@
 
         internal static string selectByEmail => $"SELECT * FROM {tableName} WHERE email = @email";
 
-        internal static string selectById => $"SELECT * FROM {tableName} WHERE userID = @userID";
+        internal static string selectById => $"SELECT * FROM {tableName} WHERE \"userID\" = @userID";
 
-        internal static string updateRecord => $"UPDATE {tableName} SET name = @name, phone = @phone, email = @email WHERE userID = @userID";
+        internal static string updateRecord => $"UPDATE {tableName} SET name = @name, phone = @phone, email = @email WHERE \"userID\" = @userID";
     }
 }

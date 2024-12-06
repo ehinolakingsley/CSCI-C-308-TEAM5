@@ -19,11 +19,11 @@ namespace CSCI_308_TEAM5.API.Repository.OneTimeCode
         {
             var payload = new OneTimeTbModel
             {
-                DateCreated = DateTime.UtcNow,
-                Expires = args.Expires,
-                RoleId = args.RoleId,
+                dateCreated = DateTime.UtcNow,
+                expires = args.expires,
+                roleID = args.roleID,
                 OTP = args.OTP,
-                UserId = args.UserId
+                userID = args.userID
             };
 
             using DbConnection db = configService.dbConnection;

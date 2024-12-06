@@ -2,19 +2,19 @@
 {
     sealed record UsersTbModel : UsersTbArgs
     {
-        public Guid UserId { get; set; }
+        public Guid userID { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime dateCreated { get; set; }
 
-        public DateTime LastModified { get; set; }
+        public DateTime lastModified { get; set; }
     }
 
     record UsersTbArgs
     {
-        public string Name { get; set; }
+        public string name { get; set; }
 
-        public string Phone { get; set; }
+        public string phone { get; set; }
 
-        public string Email { get; set; }
+        public string email { get; set; }
     }
 }

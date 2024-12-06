@@ -23,23 +23,23 @@ namespace CSCI_308_TEAM5.API.Repository.Role
             using DbConnection db = configService.dbConnection;
             await db.ExecuteAsync(Query.insert, new RoleTbModel
             {
-                UserId = userId,
-                Activated = activate,
-                Role = role.ToString(),
-                RoleId = (int)role
+                userID = userId,
+                activated = activate,
+                role = role.ToString(),
+                roleID = (int)role
             });
         }
 
         public async Task<bool> any(Guid userId, Roles role)
         {
             using DbConnection db = configService.dbConnection;
-            return await db.QueryFirstOrDefaultAsync<bool>(Query.anyRecord, new RoleTbModel { UserId = userId, RoleId = (int)role });
+            return await db.QueryFirstOrDefaultAsync<bool>(Query.anyRecord, new RoleTbModel { userID = userId, roleID = (int)role });
         }
 
         public async Task<RoleTbModel> get(Guid userId, Roles role)
         {
             using DbConnection db = configService.dbConnection;
-            return await db.QueryFirstOrDefaultAsync<RoleTbModel>(Query.select, new RoleTbModel { UserId = userId, RoleId = (int)role });
+            return await db.QueryFirstOrDefaultAsync<RoleTbModel>(Query.select, new RoleTbModel { userID = userId, roleID = (int)role });
         }
 
         public Task updateStatus(Guid userId, Roles role, bool status)

@@ -21,12 +21,12 @@ namespace CSCI_308_TEAM5.API.Repository.Authentication
         {
             var payload = new AuthenticationTbModel
             {
-                DateCreated = DateTime.UtcNow,
-                Expires = args.Expires,
-                RefreshToken = args.RefreshToken,
-                RoleId = args.RoleId,
-                Token = args.Token,
-                UserId = args.UserId
+                dateCreated = DateTime.UtcNow,
+                expires = args.expires,
+                refreshToken = args.refreshToken,
+                roleId = args.roleId,
+                token = args.token,
+                userId = args.userId
             };
 
             using DbConnection db = configService.dbConnection;
@@ -41,8 +41,8 @@ namespace CSCI_308_TEAM5.API.Repository.Authentication
             using DbConnection db = configService.dbConnection;
             await db.ExecuteAsync(Query.del, new AuthenticationTbModel
             {
-                UserId = userId,
-                RoleId = (int)roleId
+                userId = userId,
+                roleId = (int)roleId
             });
         }
 
@@ -51,8 +51,8 @@ namespace CSCI_308_TEAM5.API.Repository.Authentication
             using DbConnection db = configService.dbConnection;
             return await db.QueryFirstOrDefaultAsync<AuthenticationTbModel>(Query.selectRecord, new AuthenticationTbModel
             {
-                UserId = userId,
-                RoleId = roleId
+                userId = userId,
+                roleId = roleId
             });
         }
     }

@@ -2,17 +2,17 @@
 {
     sealed record OneTimeTbModel : OneTimeTbArgs
     {
-        public DateTime DateCreated { get; set; }
+        public DateTime dateCreated { get; set; }
     }
 
     record OneTimeTbArgs
     {
-        public Guid UserId { get; set; }
+        public Guid userID { get; set; }
 
-        public int RoleId { get; set; }
+        public int roleID { get; set; }
 
         public int OTP { get; set; }
 
-        public DateTime Expires { get; set; }
+        public DateTime expires { get; set; }
     }
 }

@@ -27,6 +27,7 @@ namespace CSCI_308_TEAM5.API.Actions.BaseAction
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return Error(HttpStatusCode.InternalServerError, ex.Message);
             }
         }

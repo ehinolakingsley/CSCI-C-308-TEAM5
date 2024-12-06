@@ -20,13 +20,13 @@ namespace CSCI_308_TEAM5.API.Repository.RiderAddress
             using DbConnection db = configService.dbConnection;
             await db.ExecuteAsync(Query.insert, new RiderAddressTbModel
             {
-                AddressId = id,
-                UserId = userId,
-                City = args.City,
-                Country = args.Country,
-                DateCreated = DateTime.UtcNow,
-                State = args.State,
-                Street = args.Street
+                addressID = id,
+                userID = userId,
+                city = args.city,
+                country = args.country,
+                dateCreated = DateTime.UtcNow,
+                state = args.state,
+                street = args.street
             });
 
             return id;

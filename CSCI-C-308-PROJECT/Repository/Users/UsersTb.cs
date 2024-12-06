@@ -24,12 +24,12 @@ namespace CSCI_308_TEAM5.API.Repository.Users
             using DbConnection db = configService.dbConnection;
             await db.ExecuteAsync(Query.insert, new UsersTbModel
             {
-                DateCreated = DateTime.UtcNow,
-                Email = args.Email?.ToLower(),
-                LastModified = DateTime.UtcNow,
-                Name = args.Name,
-                Phone = args.Phone,
-                UserId = id
+                dateCreated = DateTime.UtcNow,
+                email = args.email?.ToLower(),
+                lastModified = DateTime.UtcNow,
+                name = args.name,
+                phone = args.phone,
+                userID = id
             });
 
             return id;
@@ -40,7 +40,7 @@ namespace CSCI_308_TEAM5.API.Repository.Users
             using DbConnection db = configService.dbConnection;
             return await db.QueryFirstOrDefaultAsync<UsersTbModel>(Query.selectByEmail, new UsersTbModel
             {
-                Email = emailAddress?.ToLower()
+                email = emailAddress?.ToLower()
             });
         }
 
@@ -49,7 +49,7 @@ namespace CSCI_308_TEAM5.API.Repository.Users
             using DbConnection db = configService.dbConnection;
             return await db.QueryFirstOrDefaultAsync<UsersTbModel>(Query.selectById, new UsersTbModel
             {
-                UserId = userId
+                userID = userId
             });
         }
 
@@ -58,11 +58,11 @@ namespace CSCI_308_TEAM5.API.Repository.Users
             using DbConnection db = configService.dbConnection;
             await db.ExecuteAsync(Query.updateRecord, new UsersTbModel
             {
-                Email = args.Email?.ToLower(),
-                LastModified = DateTime.UtcNow,
-                Name = args.Name,
-                Phone = args.Phone,
-                UserId = userId
+                email = args.email?.ToLower(),
+                lastModified = DateTime.UtcNow,
+                name = args.name,
+                phone = args.phone,
+                userID = userId
             });
         }
     }

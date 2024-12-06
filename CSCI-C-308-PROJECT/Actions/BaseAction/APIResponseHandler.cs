@@ -7,7 +7,10 @@ namespace CSCI_308_TEAM5.API.Actions.BaseAction
 {
     sealed class APIResponseHandler : IActionResult
     {
-        const string contentType = "application/json";
+        const string textType = "text/plain";
+        const string jsonType = "application/json";
+
+        readonly string contentType = jsonType;
         readonly string data;
         readonly HttpStatusCode StatusCode;
 
@@ -15,12 +18,16 @@ namespace CSCI_308_TEAM5.API.Actions.BaseAction
         {
             StatusCode = statusCode;
             data = reason;
+
+            contentType = data.stringJson() ? jsonType : textType;
         }
 
         public APIResponseHandler(object data)
         {
-            this.data = JsonSerializer.Serialize(data);
+            this.data = data.ToString().stringJson() ? JsonSerializer.Serialize(data) : data.ToString();
             StatusCode = HttpStatusCode.OK;
+
+            contentType = this.data.stringJson() ? jsonType : textType;
         }
 
 

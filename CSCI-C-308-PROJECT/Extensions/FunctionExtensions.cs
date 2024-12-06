@@ -1,11 +1,24 @@
 ﻿using CSCI_308_TEAM5.API.Security;
 using System.Collections;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace CSCI_308_TEAM5.API.Extensions
 {
     public static class FunctionExtensions
     {
+        public static bool stringJson(this string value)
+        {
+            try
+            {
+                _ = JsonDocument.Parse(value); return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public static bool empty(this string value)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))

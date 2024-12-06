@@ -2,19 +2,19 @@
 {
     sealed record AuthenticationTbModel : AuthenticationTbArgs
     {
-        public DateTime DateCreated { get; set; }
+        public DateTime dateCreated { get; set; }
     }
 
     record AuthenticationTbArgs
     {
-        public Guid UserId { get; set; }
+        public Guid userId { get; set; }
 
-        public string Token { get; set; }
+        public string token { get; set; }
 
-        public Guid RefreshToken { get; set; }
+        public Guid refreshToken { get; set; }
 
-        public DateTime Expires { get; set; }
+        public DateTime expires { get; set; }
 
-        public int RoleId { get; set; }
+        public int roleId { get; set; }
     }
 }
