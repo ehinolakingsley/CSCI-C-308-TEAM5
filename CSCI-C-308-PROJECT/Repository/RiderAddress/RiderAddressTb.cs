@@ -1,4 +1,6 @@
 ﻿using CSCI_308_TEAM5.API.Services.Config;
+using Dapper;
+using System.Data.Common;
 
 namespace CSCI_308_TEAM5.API.Repository.RiderAddress
 {
@@ -11,9 +13,23 @@ namespace CSCI_308_TEAM5.API.Repository.RiderAddress
 
     sealed class RiderAddressTb(IConfigService configService) : IRiderAddressTb
     {
-        public Task<Guid> add(Guid userId, RiderAddressTbArgs args)
+        public async Task<Guid> add(Guid userId, RiderAddressTbArgs args)
         {
-            throw new NotImplementedException();
+            var id = Guid.NewGuid();
+
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.insert, new RiderAddressTbModel
+            {
+                AddressId = id,
+                UserId = userId,
+                City = args.City,
+                Country = args.Country,
+                DateCreated = DateTime.UtcNow,
+                State = args.State,
+                Street = args.Street
+            });
+
+            return id;
         }
 
         public Task update(Guid addressId, RiderAddressTbArgs args)

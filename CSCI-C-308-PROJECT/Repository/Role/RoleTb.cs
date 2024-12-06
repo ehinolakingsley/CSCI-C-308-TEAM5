@@ -1,5 +1,7 @@
 ﻿using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services.Config;
+using Dapper;
+using System.Data.Common;
 
 namespace CSCI_308_TEAM5.API.Repository.Role
 {
@@ -16,24 +18,28 @@ namespace CSCI_308_TEAM5.API.Repository.Role
 
     sealed class RoleTb(IConfigService configService) : IRoleTb
     {
-        public Task add(Guid userId, Roles role)
+        public async Task add(Guid userId, Roles role, bool activate)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.insert, new RoleTbModel
+            {
+                UserId = userId,
+                Activated = activate,
+                Role = role.ToString(),
+                RoleId = (int)role
+            });
         }
 
-        public Task add(Guid userId, Roles role, bool activate)
+        public async Task<bool> any(Guid userId, Roles role)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<bool>(Query.anyRecord, new RoleTbModel { UserId = userId, RoleId = (int)role });
         }
 
-        public Task<bool> any(Guid userId, Roles role)
+        public async Task<RoleTbModel> get(Guid userId, Roles role)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<RoleTbModel> get(Guid userId, Roles role)
-        {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<RoleTbModel>(Query.select, new RoleTbModel { UserId = userId, RoleId = (int)role });
         }
 
         public Task updateStatus(Guid userId, Roles role, bool status)

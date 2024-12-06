@@ -1,5 +1,6 @@
 ﻿using CSCI_308_TEAM5.API.Services.Config;
-using Npgsql.TypeMapping;
+using Dapper;
+using System.Data.Common;
 
 namespace CSCI_308_TEAM5.API.Repository.Users
 {
@@ -16,24 +17,53 @@ namespace CSCI_308_TEAM5.API.Repository.Users
 
     sealed class UsersTb(IConfigService configService) : IUsersTb
     {
-        public Task<Guid> add(UsersTbArgs args)
+        public async Task<Guid> add(UsersTbArgs args)
         {
-            throw new NotImplementedException();
+            var id = Guid.NewGuid();
+
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.insert, new UsersTbModel
+            {
+                DateCreated = DateTime.UtcNow,
+                Email = args.Email?.ToLower(),
+                LastModified = DateTime.UtcNow,
+                Name = args.Name,
+                Phone = args.Phone,
+                UserId = id
+            });
+
+            return id;
         }
 
-        public Task<UsersTbModel> get(string emailAddress)
+        public async Task<UsersTbModel> get(string emailAddress)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<UsersTbModel>(Query.selectByEmail, new UsersTbModel
+            {
+                Email = emailAddress?.ToLower()
+            });
         }
 
-        public Task<UsersTbModel> get(Guid userId)
+        public async Task<UsersTbModel> get(Guid userId)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<UsersTbModel>(Query.selectById, new UsersTbModel
+            {
+                UserId = userId
+            });
         }
 
-        public Task update(Guid userId, UsersTbArgs args)
+        public async Task update(Guid userId, UsersTbArgs args)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.updateRecord, new UsersTbModel
+            {
+                Email = args.Email?.ToLower(),
+                LastModified = DateTime.UtcNow,
+                Name = args.Name,
+                Phone = args.Phone,
+                UserId = userId
+            });
         }
     }
 }
