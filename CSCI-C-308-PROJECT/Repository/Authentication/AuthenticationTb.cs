@@ -1,5 +1,8 @@
-﻿using CSCI_308_TEAM5.API.Security;
+﻿using CSCI_308_TEAM5.API.Repository.Role;
+using CSCI_308_TEAM5.API.Security;
 using CSCI_308_TEAM5.API.Services.Config;
+using Dapper;
+using System.Data.Common;
 
 namespace CSCI_308_TEAM5.API.Repository.Authentication
 {
@@ -14,19 +17,43 @@ namespace CSCI_308_TEAM5.API.Repository.Authentication
 
     sealed class AuthenticationTb(IConfigService configService) : IAuthenticationTb
     {
-        public Task addOrUpdate(AuthenticationTbArgs args)
+        public async Task addOrUpdate(AuthenticationTbArgs args)
         {
-            throw new NotImplementedException();
+            var payload = new AuthenticationTbModel
+            {
+                DateCreated = DateTime.UtcNow,
+                Expires = args.Expires,
+                RefreshToken = args.RefreshToken,
+                RoleId = args.RoleId,
+                Token = args.Token,
+                UserId = args.UserId
+            };
+
+            using DbConnection db = configService.dbConnection;
+            if (await db.QueryFirstOrDefaultAsync<bool>(Query.anyRecord, payload))
+                await db.ExecuteAsync(Query.del, payload);
+            else
+                await db.ExecuteAsync(Query.insert, payload);
         }
 
-        public Task del(Guid userId, Roles roleId)
+        public async Task del(Guid userId, Roles roleId)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.del, new AuthenticationTbModel
+            {
+                UserId = userId,
+                RoleId = (int)roleId
+            });
         }
 
-        public Task<AuthenticationTbModel> get(Guid userId, int roleId)
+        public async Task<AuthenticationTbModel> get(Guid userId, int roleId)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<AuthenticationTbModel>(Query.selectRecord, new AuthenticationTbModel
+            {
+                UserId = userId,
+                RoleId = roleId
+            });
         }
     }
 }
