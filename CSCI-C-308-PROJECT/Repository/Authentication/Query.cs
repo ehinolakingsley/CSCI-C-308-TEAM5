@@ -10,6 +10,6 @@
 
         internal static string anyRecord => $"SELECT CASE WHEN EXISTS (SELECT 1 FROM {tableName} WHERE userID = @userID AND roleID = @roleID) THEN 1 ELSE 0 END";
 
-        internal static string insert => tableName."";
+        internal static string insert => tableName.getInsertQuery<AuthenticationTbModel>();
     }
 }
