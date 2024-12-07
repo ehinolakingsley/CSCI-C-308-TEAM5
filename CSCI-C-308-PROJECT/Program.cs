@@ -28,6 +28,8 @@ builder.Services.AddSwaggerGen(opt =>
     opt.IncludeXmlComments(xmlPath);
 });
 
+builder.WebHost.ConfigureKestrel(options => options.Listen(IPAddress.Any, 2024, protocol => protocol.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1));
+
 var targetAssembly = Path.Combine(AppContext.BaseDirectory, $"{appAssemblyName}.dll");
 var assemblyName = Assembly.Load(AssemblyName.GetAssemblyName(targetAssembly));
 builder.Services.AddValidatorsFromAssembly(assemblyName);
