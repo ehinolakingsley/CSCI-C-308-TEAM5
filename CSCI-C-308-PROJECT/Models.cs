@@ -29,6 +29,17 @@
         public string ZipCode { get; set; }
 
         public string Country { get; set; }
+
+        public override string ToString()
+        {
+            if (!this.addressValid(out _))
+                return "N/A";
+
+            if (ZipCode.empty())
+                return $"{Street}\n{City}, {State}\n{Country}.";
+
+            return $"{Street}\n{City}, {State} {ZipCode}\n{Country}.";
+        }
     }
 
     public sealed record EmailClientCredentialInfo(string SMTPAddress, int SMTPPort, string SMTPPwd, string SMTPServer);

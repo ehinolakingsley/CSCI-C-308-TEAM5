@@ -64,13 +64,14 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
                     tempUserId = await repo.usersTb.add(payload);
 
                 await repo.roleTb.add(tempUserId.Value, Roles.Rider, true);
-                await repo.riderAddressTb.add(tempUserId.Value, new Repository.RiderAddress.RiderAddressTbArgs
+                var addressId = await repo.riderAddressTb.add(tempUserId.Value, new Repository.RiderAddress.RiderAddressTbArgs
                 {
                     city = args.Address.City,
                     country = args.Address.Country,
                     state = args.Address.State,
                     street = args.Address.Street
                 });
+                await repo.usersTb.updateDefaultAddress(tempUserId.Value, addressId);
 
                 emailServices.postMail(args.EmailAddress, MailTemplate.welcomeRiderMsg(args.FullName), $"Welcome to {configService.ProductName}");
 
@@ -250,6 +251,45 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
                 await repo.oneTimeCodeTb.del(otpCode);
 
                 return Ok(new TokenInfo(refreshToken, token, (int)expires.Subtract(DateTime.UtcNow).TotalSeconds));
+            });
+        }
+
+        public async Task<IActionResult> updateRiderProfile(RiderArgs args)
+        {
+            return await Execute(async () =>
+            {
+                var userProfile = await repo.usersTb.get(userIdentity.userId);
+
+                if (userProfile is null)
+                    return Error(HttpStatusCode.NotFound, "Unable to retrieve account information. Please contact administrator for assistance.");
+
+                var payload = new Repository.Users.UsersTbArgs
+                {
+                    email = args.EmailAddress,
+                    name = args.FullName,
+                    phone = args.PhoneNumber,
+                };
+
+                // Update profile with new data 
+                await repo.usersTb.update(userProfile.userID, payload);
+
+                var addressInfo = new Repository.RiderAddress.RiderAddressTbArgs
+                {
+                    city = args.Address.City,
+                    country = args.Address.Country,
+                    state = args.Address.State,
+                    street = args.Address.Street
+                };
+
+                if (userProfile.defaultAddress.empty())
+                {
+                    var addressId = await repo.riderAddressTb.add(userProfile.userID, addressInfo);
+                    await repo.usersTb.updateDefaultAddress(userProfile.userID, addressId);
+                }
+                else
+                    await repo.riderAddressTb.update(userProfile.defaultAddress.Value, addressInfo);
+
+                return Ok("Your account's profile has been accurately updated");
             });
         }
     }

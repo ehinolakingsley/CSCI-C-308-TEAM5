@@ -13,6 +13,8 @@ namespace CSCI_308_TEAM5.API.Repository.Users
         Task update(Guid userId, UsersTbArgs args);
 
         Task<Guid> add(UsersTbArgs args);
+
+        Task updateDefaultAddress(Guid userId, Guid? addressId);
     }
 
     sealed class UsersTb(IConfigService configService) : IUsersTb

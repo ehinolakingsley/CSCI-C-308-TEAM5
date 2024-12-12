@@ -9,6 +9,12 @@ namespace CSCI_308_TEAM5.API.Repository.RiderAddress
         Task<Guid> add(Guid userId, RiderAddressTbArgs args);
 
         Task update(Guid addressId, RiderAddressTbArgs args);
+
+        Task del(Guid userId, Guid addressId);
+
+        Task<IEnumerable<RiderAddressTbModel>> get(Guid userId);
+
+        Task<bool> any(Guid userId, Guid addressId);
     }
 
     sealed class RiderAddressTb(IConfigService configService) : IRiderAddressTb

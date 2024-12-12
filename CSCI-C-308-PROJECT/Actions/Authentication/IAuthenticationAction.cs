@@ -17,5 +17,9 @@ namespace CSCI_308_TEAM5.API.Actions.Authentication
         Task<IActionResult> addDriver(UsersArgs args);
 
         Task<IActionResult> getProfileInfo();
+
+        Task<IActionResult> updateRiderProfile(RiderArgs args);
+
+
     }
 }

@@ -10,5 +10,7 @@
         public const string jwtClaimUsername = "username";
         public const string jwtClaimRoleID = "role";
         public const string jwtClaimUserID = "id";
+
+        public const string ErrNotFound = "Sorry, can't validate account. Contact administrator for assistance.";
     }
 }

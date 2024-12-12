@@ -35,6 +35,14 @@ namespace CSCI_308_TEAM5.API.Extensions
             return value.Length == 0;
         }
 
+        public static bool empty(this Guid? value)
+        {
+            if (value is null)
+                return true;
+
+            return value == Guid.Empty;
+        }
+
         public static string parseSchemedToken(this string token, string scheme = "Bearer")
         {
             var tokens = token.ToString().Split(' ');

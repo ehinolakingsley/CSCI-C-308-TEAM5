@@ -7,6 +7,8 @@
         public DateTime dateCreated { get; set; }
 
         public DateTime lastModified { get; set; }
+
+        public Guid? defaultAddress { get; set; }
     }
 
     record UsersTbArgs
