@@ -11,8 +11,6 @@ namespace CSCI_308_TEAM5.API.Repository.Role
 
         Task add(Guid userId, Roles role, bool activate);
 
-        Task updateStatus(Guid userId, Roles role, bool status);
-
         Task<RoleTbModel> get(Guid userId, Roles role);
 
         Task<IEnumerable<RoleTbModel>> get(Roles role);
@@ -44,9 +42,10 @@ namespace CSCI_308_TEAM5.API.Repository.Role
             return await db.QueryFirstOrDefaultAsync<RoleTbModel>(Query.select, new RoleTbModel { userID = userId, roleID = (int)role });
         }
 
-        public Task updateStatus(Guid userId, Roles role, bool status)
+        public async Task<IEnumerable<RoleTbModel>> get(Roles role)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryAsync<RoleTbModel>(Query.selectAll, new RoleTbModel { roleID = (int)role });
         }
     }
 }

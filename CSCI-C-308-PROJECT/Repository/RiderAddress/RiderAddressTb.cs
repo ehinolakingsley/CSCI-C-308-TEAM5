@@ -34,15 +34,70 @@ namespace CSCI_308_TEAM5.API.Repository.RiderAddress
                 country = args.country,
                 dateCreated = DateTime.UtcNow,
                 state = args.state,
-                street = args.street
+                street = args.street,
+                DELETED = false,
+                zipCode = args.zipCode,
             });
 
             return id;
         }
 
-        public Task update(Guid addressId, RiderAddressTbArgs args)
+        public async Task<bool> any(Guid userId, Guid addressId)
         {
-            throw new NotImplementedException();
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<bool>(Query.anyAddress, new RiderAddressTbModel
+            {
+                addressID = addressId,
+                userID = userId,
+                DELETED = false
+            });
+        }
+
+        public async Task del(Guid userId, Guid addressId)
+        {
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.deleteAddress, new RiderAddressTbModel
+            {
+                addressID = addressId,
+                userID = userId,
+                DELETED = true // Persist record in the DB to utilize for audit sake
+            });
+        }
+
+        public async Task<IEnumerable<RiderAddressTbModel>> get(Guid userId)
+        {
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryAsync<RiderAddressTbModel>(Query.selectByUserID, new RiderAddressTbModel
+            {
+                userID = userId,
+                DELETED = false
+            });
+        }
+
+        public async Task<RiderAddressTbModel> get(Guid userId, Guid addressId)
+        {
+            using DbConnection db = configService.dbConnection;
+            return await db.QueryFirstOrDefaultAsync<RiderAddressTbModel>(Query.selectByAddressID, new RiderAddressTbModel
+            {
+                userID = userId,
+                addressID = addressId,
+                DELETED = false
+            });
+        }
+
+        public async Task update(Guid addressId, RiderAddressTbArgs args)
+        {
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.update, new RiderAddressTbModel
+            {
+                addressID = addressId,
+                DELETED = false,
+                city = args.city,
+                country = args.country,
+                state = args.state,
+                street = args.street,
+                zipCode = args.zipCode
+            });
         }
     }
 }

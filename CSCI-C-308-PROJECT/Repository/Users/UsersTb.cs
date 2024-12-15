@@ -67,5 +67,16 @@ namespace CSCI_308_TEAM5.API.Repository.Users
                 userID = userId
             });
         }
+
+        public async Task updateDefaultAddress(Guid userId, Guid? addressId)
+        {
+            using DbConnection db = configService.dbConnection;
+            await db.ExecuteAsync(Query.updateDefaultAddress, new UsersTbModel
+            {
+                lastModified = DateTime.UtcNow,
+                defaultAddress = addressId,
+                userID = userId
+            });
+        }
     }
 }

@@ -7,6 +7,8 @@
         public Guid addressID { get; set; }
 
         public DateTime dateCreated { get; set; }
+
+        public bool DELETED { get; set; }
     }
 
     public record RiderAddressTbArgs
