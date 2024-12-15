@@ -8,4 +8,24 @@
 
         public AddressArgs AddressInfo { get; set; }
     }
+
+    public sealed record RideRequestArgs
+    {
+        public DateTime PickUpDateTime { get; set; }
+
+        public Guid PickUpAddressID { get; set; }
+
+        public string AdditionalInfomation { get; set; }
+    }
+
+    public sealed record RideHistoryInfo
+    {
+        public Guid RequestID { get; set; }
+
+        public string Status { get; set; }
+
+        public string PickUpDateTime { get; set; }
+
+        public string PickUpLocation { get; set; }
+    }
 }

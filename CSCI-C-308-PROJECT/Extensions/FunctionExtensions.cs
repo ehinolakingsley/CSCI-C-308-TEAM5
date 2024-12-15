@@ -7,6 +7,45 @@ namespace CSCI_308_TEAM5.API.Extensions
 {
     public static class FunctionExtensions
     {
+        public static string formatDateTime(this DateTime dateTime) => dateTime.ToString("MMM, ddd dd yyyy @  hh:mm tt");
+
+        public static T CEnum<T>(this int value) where T : Enum
+        {
+            try
+            {
+                return (T)Enum.ToObject(typeof(T), value);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+
+        public static string serializeJson(this object value)
+        {
+            try
+            {
+                return JsonSerializer.Serialize(value);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static T deserializeJson<T>(this string json)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<T>(json);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         public static bool stringJson(this string value)
         {
             try

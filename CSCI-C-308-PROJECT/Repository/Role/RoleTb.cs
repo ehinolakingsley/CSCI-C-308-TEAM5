@@ -14,6 +14,8 @@ namespace CSCI_308_TEAM5.API.Repository.Role
         Task updateStatus(Guid userId, Roles role, bool status);
 
         Task<RoleTbModel> get(Guid userId, Roles role);
+
+        Task<IEnumerable<RoleTbModel>> get(Roles role);
     }
 
     sealed class RoleTb(IConfigService configService) : IRoleTb

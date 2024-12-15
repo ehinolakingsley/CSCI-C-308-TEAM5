@@ -1,4 +1,6 @@
-﻿namespace CSCI_308_TEAM5.API.Extensions
+﻿using CSCI_308_TEAM5.API.Repository.RiderAddress;
+
+namespace CSCI_308_TEAM5.API.Extensions
 {
     public static class ConverterExtensions
     {
@@ -32,6 +34,14 @@
                 return result;
 
             throw new FormatException($"{value} could not be converted to an integer.");
+        }
+
+        public static AddressArgs CAddressArgs(this RiderAddressTbModel args)
+        {
+            if (args is null)
+                return null;
+
+            return new AddressArgs(args.street, args.city, args.state, args.zipCode, args.country);
         }
     }
 }

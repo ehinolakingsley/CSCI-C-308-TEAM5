@@ -2,7 +2,7 @@
 {
     public interface IRiderAction
     {
-        Task<IActionResult> requestForRider(Guid addressId);
+        Task<IActionResult> requestForRider(RideRequestArgs args);
 
         Task<IActionResult> riderHistory();
 

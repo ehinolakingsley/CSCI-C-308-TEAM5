@@ -14,6 +14,8 @@ namespace CSCI_308_TEAM5.API.Repository.RiderAddress
 
         Task<IEnumerable<RiderAddressTbModel>> get(Guid userId);
 
+        Task<RiderAddressTbModel> get(Guid userId, Guid addressId);
+
         Task<bool> any(Guid userId, Guid addressId);
     }
 
